@@ -3,21 +3,87 @@ import TextField from '@mui/material/TextField'
 import Switch from '@mui/material/Switch'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
+import { useState } from 'react'
 
+const FormSignUp = ({handleSubmit}) => {
+    
+    
+    const [name, setName] = useState("")
 
-const FormSignUp = () => {
-    return <form>
+    const [lastName, setLastName] = useState("")
+    const [email, setEmail] = useState('')
+    const [prom, setProm] = useState(true)
+    const [nove,  setNov] = useState(false)
 
-        <TextField id='name' label="Nombre" variant='outlined' fullWidth margin='normal' />
-        <TextField id='lastName' label="Apellidos" variant='outlined' fullWidth margin='normal' />
-        <TextField id='email' label="Email" variant='outlined' fullWidth margin='normal' />
+    const [errors, setErrors] = useState({
+        name:{
+        error: true, 
+        message: "deben ser 3 caracteres",
+    },
+    })
+
+    return <form onSubmit={ (e) => {
+        //prevent default behavior, post or get
+        e.preventDefault()
+        handleSubmit({name, lastName, email, prom, nove})
+    }}>
+
+        <TextField
+         id='name' 
+         label="Nombre" 
+         variant='outlined' 
+         fullWidth 
+         margin='normal' 
+         onChange={ (e)=>{
+            console.log(e.target.value)
+                setName(e.target.value)
+         }}
+         value={name}
+         error= {errors.name.error}
+         //use object erros: name with error and message value
+         helperText={errors.name.error ? errors.name.message : ""}
+         />
+        <TextField 
+         id='lastName'
+         label="Apellidos" 
+         variant='outlined' 
+         fullWidth margin='normal' 
+         value={lastName} 
+         onChange={(e) => setLastName(e.target.value)} />
+        <TextField 
+        id='email' 
+        label="Email" 
+        variant='outlined' 
+        fullWidth 
+        margin='normal'
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        />
 
 
         <FormGroup>
-            <FormControlLabel control={<Switch defaultChecked />} label="Promociones" />
-            <FormControlLabel control={ <Switch defaultChecked />} label= "Novedades" />
+            <FormControlLabel control={
+            <Switch 
+            
+            checked={prom} 
+            onChange={(e) => setProm(e.target.checked) }
+            
+            />} label="Promociones"
+             />
+            
+            <FormControlLabel 
+            control={ 
+            <Switch 
+           
+            checked={nove}
+            onChange={ (e) => {
+                setNov(e.target.checked)
+            }}
+            />} 
+            label= "Novedades" 
+            />
         </FormGroup>
-        <Button variant='contained' >Registrarse</Button>
+        <Button variant='contained' type='submit'>Registrarse</Button>
     </form>
 }
 
